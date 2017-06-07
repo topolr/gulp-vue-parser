@@ -31,6 +31,8 @@
     "node-sass": "^4.5.3",
     "through2": "^2.0.3",
     "topolr-util": "^1.0.4",
+    "uglify-js": "^3.0.15",
+    "uglifycss": "0.0.27",
     "vue-template-compiler": "^2.3.3"
   }
 }

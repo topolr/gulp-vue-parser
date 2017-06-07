@@ -25,6 +25,6 @@ base.prototype.getCodeStr = function (filepath) {
         return str;
     });
 };
-module.exports = function (content,option) {
-    return new base(content,option);
+module.exports = function (content, option) {
+    return new base(content, option);
 };

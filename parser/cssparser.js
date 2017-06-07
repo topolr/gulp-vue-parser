@@ -57,6 +57,11 @@ var util = {
     },
     getResult: function (content, path) {
         if(content) {
+            var uglifycss = require("uglifycss");
+            content = uglifycss.processString(content, {
+                uglyComments: true,
+                cuteComments: true
+            });
             var a = path.split(".")[0].replace(/\\/g, "/").replace(/\//g, ".");
             a = "\""+a.split(".").reverse().splice(0, 4).reverse().join(".")+"\"";
             return codep.replace(/\[\[code\]\]/g, JSON.stringify(content)).replace(/\[\[path\]\]/g, a);
