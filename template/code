@@ -1,18 +1,18 @@
 define(function (require, exports, module) {
     [[css]]
-    module.exports=(function(modules){
-        var q=function(i){
-            var a = {exports: {}};
-            modules[i](require, a.exports, a);
-            return a.exports.__esModule?a.exports.default:a.exports;
+    module.exports=(function(modules,require,exports,module){
+        var excute=function(index){
+            var _result = {exports: {}};
+            modules[index](require, _result.exports, _result);
+            return _result.exports.__esModule?_result.exports.default:_result.exports;
         };
-        var a={};
+        var result={};
         for(var m=0;m<modules.length;m++){
-            b=q(m),c=Object.keys(b);
-            for(var i=0;i<c.length;i++){
-              a[c[i]]=b[c[i]];
+            var data=excute(m),keys=Object.keys(data);
+            for(var i=0;i<keys.length;i++){
+              result[keys[i]]=data[keys[i]];
             }
         }
-        return a;
-    })([[code]]);
+        return result;
+    })([[code]],require,exports,module);
 });

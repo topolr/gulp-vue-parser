@@ -5,6 +5,7 @@ var cssp = require("./parser/cssparser");
 var temp = require("./parser/templateparser");
 var idp = require("./parser/idparser");
 var config = require("./parser/config/config");
+var uglify = require("uglify-js");
 var codetemp = topolr.file(require("path").resolve(__dirname, "./template/code")).readSync();
 
 var base = function (content, option) {
@@ -22,6 +23,12 @@ base.prototype.getCodeStr = function (filepath) {
         }
         str += "[" + r.join(",") + "]";
         str = codetemp.replace(/\[\[css\]\]/g, result.content).replace(/\[\[code\]\]/g, str);
+        try {
+            var result = uglify.minify(str);
+            str=result.code;
+        }catch (e){
+            console.log(e);
+        }
         return str;
     });
 };

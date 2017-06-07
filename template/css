@@ -1,14 +1,7 @@
 (function(){
-    var _$b = document.getElementsByTagName("style"), _$has = false;
-    for (var i = 0; i < _$b.length; i++) {
-        if (_$b[i].dataset && _$b[i].dataset.name === [[path]]) {_$has = true;}
-    }
-    if (!_$has) {
-        var _$a = document.createElement("style");
-        _$a.setAttribute("media", "screen");
-        _$a.setAttribute("type", "text/css");
-        _$a.setAttribute("data-name",[[path]]);
-        _$a.appendChild(document.createTextNode([[code]]));
-        document.getElementsByTagName("head")[0].appendChild(_$a);
-    }
+    var _$a = document.createElement("style");
+    _$a.setAttribute("media", "screen");
+    _$a.setAttribute("type", "text/css");
+    _$a.appendChild(document.createTextNode([[code]]));
+    document.getElementsByTagName("head")[0].appendChild(_$a);
 })();
