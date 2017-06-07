@@ -1,7 +1,1 @@
-(function(){
-    var _$a = document.createElement("style");
-    _$a.setAttribute("media", "screen");
-    _$a.setAttribute("type", "text/css");
-    _$a.appendChild(document.createTextNode([[code]]));
-    document.getElementsByTagName("head")[0].appendChild(_$a);
-})();
+!function(){var e=document.createElement("style");e.setAttribute("media","screen"),e.setAttribute("type","text/css"),e.appendChild(document.createTextNode([[code]])),document.getElementsByTagName("head")[0].appendChild(e)}();

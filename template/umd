@@ -1,0 +1,26 @@
+(function (window, factory) {
+    if (typeof exports === 'object') {
+        module.exports = factory();
+    } else if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else {
+        window.[[name]] = factory();
+    }
+})(this, function () {
+    [[css]]
+    return (function(modules){
+        var excute=function(index){
+            var _result = {exports: {}};
+            modules[index](require, _result.exports, _result);
+            return _result.exports.__esModule?_result.exports.default:_result.exports;
+        };
+        var result={};
+        for(var m=0;m<modules.length;m++){
+            var data=excute(m),keys=Object.keys(data);
+            for(var i=0;i<keys.length;i++){
+              result[keys[i]]=data[keys[i]];
+            }
+        }
+        return result;
+    })([[code]]);
+});

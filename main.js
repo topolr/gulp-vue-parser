@@ -5,12 +5,11 @@ var cssp = require("./parser/cssparser");
 var temp = require("./parser/templateparser");
 var idp = require("./parser/idparser");
 var config = require("./parser/config/config");
-var uglify = require("uglify-js");
-var codetemp = topolr.file(require("path").resolve(__dirname, "./template/code")).readSync();
+var codetemp = topolr.file(require("path").resolve(__dirname, "./template/umd")).readSync();
 
 var base = function (content, option) {
-    this.option = topolr.extend(true, {}, config, option);
     this._info = parser.parseComponent(content);
+    this.option = topolr.extend(true, {}, config, option);
 };
 base.prototype.getCodeStr = function (filepath) {
     var ths = this;
@@ -22,13 +21,15 @@ base.prototype.getCodeStr = function (filepath) {
             r.push(idp.call(ths, result.id));
         }
         str += "[" + r.join(",") + "]";
-        str = codetemp.replace(/\[\[css\]\]/g, result.content).replace(/\[\[code\]\]/g, str);
-        try {
-            var result = uglify.minify(str);
-            str=result.code;
-        }catch (e){
-            console.log(e);
+        var codetemp = "";
+        if (ths.option.codeType === "cmd") {
+            codetemp = topolr.file(require("path").resolve(__dirname, "./template/cmd")).readSync();
+        } else {
+            codetemp = topolr.file(require("path").resolve(__dirname, "./template/umd")).readSync();
+            var name=filepath.replace(/\\/g,"/").split("/").pop().split(".")[0];
+            codetemp = codetemp.replace(/\[\[name\]\]/g, name);
         }
+        str = codetemp.replace(/\[\[css\]\]/g, result.content).replace(/\[\[code\]\]/g, str);
         return str;
     });
 };

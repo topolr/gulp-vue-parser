@@ -102,6 +102,7 @@ module.exports = function (info, path) {
                     if (style.scoped) {
                         content += util.editSelector(code, id);
                     } else {
+                        id="";
                         content += code;
                     }
                     queue.next();
@@ -113,6 +114,7 @@ module.exports = function (info, path) {
                 if (style.scoped) {
                     content += util.editSelector(style.content, id);
                 } else {
+                    id="";
                     content += style.content;
                 }
                 queue.next();
