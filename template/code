@@ -1,0 +1,18 @@
+define(function (require, exports, module) {
+    [[css]]
+    module.exports=(function(modules){
+        var q=function(i){
+            var a = {exports: {}};
+            modules[i](require, a.exports, a);
+            return a.exports.__esModule?a.exports.default:a.exports;
+        };
+        var a={};
+        for(var m=0;m<modules.length;m++){
+            b=q(m),c=Object.keys(b);
+            for(var i=0;i<c.length;i++){
+              a[c[i]]=b[c[i]];
+            }
+        }
+        return a;
+    })([[code]]);
+});
