@@ -1,6 +1,6 @@
 define(function (require, exports, module) {
     [[css]]
-    module.exports=(function(modules,require,exports,module){
+    module.exports=(function(modules){
         var excute=function(index){
             var _result = {exports: {}};
             modules[index](require, _result.exports, _result);
@@ -14,5 +14,5 @@ define(function (require, exports, module) {
             }
         }
         return result;
-    })([[code]],require,exports,module);
+    })([[code]]);
 });
