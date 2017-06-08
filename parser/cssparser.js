@@ -55,16 +55,14 @@ var util = {
         }
         return r.join("");
     },
-    getResult: function (content, path) {
+    getResult: function (content) {
         if(content) {
             var uglifycss = require("uglifycss");
             content = uglifycss.processString(content, {
                 uglyComments: true,
                 cuteComments: true
             });
-            var a = path.split(".")[0].replace(/\\/g, "/").replace(/\//g, ".");
-            a = "\""+a.split(".").reverse().splice(0, 4).reverse().join(".")+"\"";
-            return codep.replace(/\[\[code\]\]/g, JSON.stringify(content)).replace(/\[\[path\]\]/g, a);
+            return codep.replace(/\[\[code\]\]/g, JSON.stringify(content));
         }else{
             return "";
         }
@@ -126,15 +124,25 @@ module.exports = function (info, path) {
     }
     queue.complete(function () {
         if (ths.option.styleOutput) {
-            content = ths.option.styleOutput(content, require("path").resolve(path, "./../"), path)||"";
-            ps.resolve({
-                content: content,
-                id: id
+            ths.option.styleOutput(content, require("path").resolve(path, "./../"), path).then(function (_content) {
+                ps.resolve({
+                    content: _content||"",
+                    id: id,
+                    raw:content
+                });
+            },function (e) {
+                console.log(e);
+                ps.resolve({
+                    content: "",
+                    id: id,
+                    raw:content
+                });
             });
         } else {
             ps.resolve({
-                content: util.getResult(content,path),
-                id: id
+                content: util.getResult(content),
+                id: id,
+                raw:content
             });
         }
     });

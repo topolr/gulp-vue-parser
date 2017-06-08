@@ -2,5 +2,7 @@ module.exports={
     defaultStyleLang:"sass",
     styleParse:null,
     styleOutput:null,
-    codeType:"cmd"
+    codeType:"cmd",
+    outputStyleFile:true,
+    outputScriptFile:true
 };

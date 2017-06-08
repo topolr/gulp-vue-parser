@@ -12,10 +12,10 @@ module.exports = function (option) {
         }
         if (file.isBuffer()) {
             var content = file.contents.toString("utf8");
-            base(content,option).getCodeStr(file.path).then(function (str) {
+            base(content,option).outputFile(file.path).then(function (str) {
                 file.contents = new Buffer(str);
                 callback(null, file);
-            })
+            });
         }else{
             callback(null, file);
         }

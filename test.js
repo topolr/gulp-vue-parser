@@ -1,9 +1,10 @@
 var topolr=require("topolr-util");
-var content=topolr.file("./test/boot.vue").readSync();
+var path=require("path").resolve(__dirname,"./test/boot.vue");
+var content=topolr.file(path).readSync();
 
 var base=require("./main");
 var a=base(content);
-a.getCodeStr("G:/spark/vue/modules/tesst/vue/boot.vue").then(function (code) {
+a.outputFile(path).then(function (code) {
     console.log(code)
     console.log("done");
 },function (a) {
