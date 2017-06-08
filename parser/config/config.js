@@ -3,6 +3,6 @@ module.exports={
     styleParse:null,
     styleOutput:null,
     codeType:"cmd",
-    outputStyleFile:true,
+    outputStyleFile:false,
     outputScriptFile:true
 };

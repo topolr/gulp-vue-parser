@@ -53,17 +53,24 @@ var util = {
                 _b && r.push("{" + _b + "}");
             }
         }
-        return r.join("");
+        var result = r.join("");
+        return result;
     },
-    getResult: function (content) {
-        if(content) {
+    minify: function (result) {
+        if(result) {
             var uglifycss = require("uglifycss");
-            content = uglifycss.processString(content, {
+            return uglifycss.processString(result, {
                 uglyComments: true,
                 cuteComments: true
             });
-            return codep.replace(/\[\[code\]\]/g, JSON.stringify(content));
         }else{
+            return "";
+        }
+    },
+    getResult: function (content) {
+        if (content) {
+            return codep.replace(/\[\[code\]\]/g, JSON.stringify(content));
+        } else {
             return "";
         }
     }
@@ -100,7 +107,7 @@ module.exports = function (info, path) {
                     if (style.scoped) {
                         content += util.editSelector(code, id);
                     } else {
-                        id="";
+                        id = "";
                         content += code;
                     }
                     queue.next();
@@ -112,7 +119,7 @@ module.exports = function (info, path) {
                 if (style.scoped) {
                     content += util.editSelector(style.content, id);
                 } else {
-                    id="";
+                    id = "";
                     content += style.content;
                 }
                 queue.next();
@@ -126,23 +133,23 @@ module.exports = function (info, path) {
         if (ths.option.styleOutput) {
             ths.option.styleOutput(content, require("path").resolve(path, "./../"), path).then(function (_content) {
                 ps.resolve({
-                    content: _content||"",
+                    content: _content || "",
                     id: id,
-                    raw:content
+                    raw: util.minify(content)
                 });
-            },function (e) {
+            }, function (e) {
                 console.log(e);
                 ps.resolve({
                     content: "",
                     id: id,
-                    raw:content
+                    raw: util.minify(content)
                 });
             });
         } else {
             ps.resolve({
                 content: util.getResult(content),
                 id: id,
-                raw:content
+                raw: util.minify(content)
             });
         }
     });
