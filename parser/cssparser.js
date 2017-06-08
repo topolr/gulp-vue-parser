@@ -69,7 +69,7 @@ var util = {
     },
     getResult: function (content) {
         if (content) {
-            return codep.replace(/\[\[code\]\]/g, JSON.stringify(content));
+            return codep.replace(/\[\[code\]\]/g, JSON.stringify(util.minify(content)));
         } else {
             return "";
         }
