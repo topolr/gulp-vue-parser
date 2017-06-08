@@ -3,14 +3,12 @@
         color:red;
     }
 </style>
-
 <template>
     <div>
         <a-header></a-header>
         <a-footer></a-footer>
     </div>
 </template>
-
 <script>
     export default {
         data:function(){
