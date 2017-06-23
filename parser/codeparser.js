@@ -1,5 +1,5 @@
 var babel = require("babel-core");
-var _path = require("path").resolve(__dirname, "./../node_modules/");
+var _path = require("path").resolve(process.cwd(), "./node_modules/");
 module.exports=function (info) {
     var content=info.content;
     var code = babel.transform(content, {
