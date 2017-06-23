@@ -15,6 +15,8 @@ module.exports = function (option) {
             base(content,option).outputFile(file.path).then(function (str) {
                 file.contents = new Buffer(str);
                 callback(null, file);
+            },function (err) {
+                console.log(err);
             });
         }else{
             callback(null, file);
