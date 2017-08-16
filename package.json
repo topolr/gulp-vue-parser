@@ -1,6 +1,6 @@
 {
   "name": "gulp-vue-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Parse .vue file to a single cmd/umd javascript file",
   "main": "index.js",
   "scripts": {

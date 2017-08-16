@@ -42,8 +42,13 @@ var util = {
                     var p = [];
                     _b.split(" ").forEach(function (p1, p2, p3) {
                         var t = [];
-                        p1.split(",").forEach(function (p4, p4, p4) {
-                            t.push(p4 + "[" + id + "]");
+                        p1.split(",").forEach(function (p4) {
+                            if(p4.indexOf(":")===-1) {
+                                t.push(p4 + "[" + id + "]");
+                            }else{
+                                var et=p4.split(":");
+                                t.push(et.shift() + "[" + id + "]:"+et.join(":"));
+                            }
                         });
                         p.push(t.join(","));
                     });
@@ -54,6 +59,7 @@ var util = {
             }
         }
         var result = r.join("");
+        console.log(result)
         return result;
     },
     minify: function (result) {
