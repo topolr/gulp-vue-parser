@@ -59,7 +59,6 @@ var util = {
             }
         }
         var result = r.join("");
-        console.log(result)
         return result;
     },
     minify: function (result) {
