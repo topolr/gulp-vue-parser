@@ -9,57 +9,68 @@ var util = {
     },
     parseless: function (content) {
         var ps = topolr.promise();
-        less.render(content, function (e, output) {
-            if (!e) {
-                ps.resolve(output.css);
-            } else {
-                ps.reject(e);
-            }
-        });
+        if(content) {
+            less.render(content, function (e, output) {
+                if (!e) {
+                    ps.resolve(output.css);
+                } else {
+                    ps.reject(e);
+                }
+            });
+        }else{
+            ps.resolve("");
+        }
         return ps;
     },
     parsesass: function (content, path) {
         var ps = topolr.promise();
-        sass.render({
-            data: content,
-            sourceMap: true,
-            includePaths: [require("path").resolve(path, "./../")]
-        }, function (err, result) {
-            if (!err) {
-                ps.resolve(result.css.toString());
-            } else {
-                ps.reject(err);
-            }
-        });
+        if(content) {
+            sass.render({
+                data: content,
+                sourceMap: true,
+                includePaths: [require("path").resolve(path, "./../")]
+            }, function (err, result) {
+                if (!err) {
+                    ps.resolve(result.css.toString());
+                } else {
+                    ps.reject(err);
+                }
+            });
+        }else{
+            ps.resolve("");
+        }
         return ps;
     },
     editSelector: function (content, id) {
-        var _a = content.split(/\{|\}/), r = [];
-        for (var i = 0; i < _a.length; i++) {
-            var _b = _a[i].trim();
-            if ((i + 1) % 2 !== 0) {
-                if (_b) {
-                    var p = [];
-                    _b.split(" ").forEach(function (p1, p2, p3) {
-                        var t = [];
-                        p1.split(",").forEach(function (p4) {
-                            if(p4.indexOf(":")===-1) {
-                                t.push(p4 + "[" + id + "]");
-                            }else{
-                                var et=p4.split(":");
-                                t.push(et.shift() + "[" + id + "]:"+et.join(":"));
-                            }
+        if(content) {
+            var _a = content.split(/\{|\}/), r = [];
+            for (var i = 0; i < _a.length; i++) {
+                var _b = _a[i].trim();
+                if ((i + 1) % 2 !== 0) {
+                    if (_b) {
+                        var p = [];
+                        _b.split(" ").forEach(function (p1, p2, p3) {
+                            var t = [];
+                            p1.split(",").forEach(function (p4) {
+                                if (p4.indexOf(":") === -1) {
+                                    t.push(p4 + "[" + id + "]");
+                                } else {
+                                    var et = p4.split(":");
+                                    t.push(et.shift() + "[" + id + "]:" + et.join(":"));
+                                }
+                            });
+                            p.push(t.join(","));
                         });
-                        p.push(t.join(","));
-                    });
-                    r.push(p.join(" "));
+                        r.push(p.join(" "));
+                    }
+                } else {
+                    _b && r.push("{" + _b + "}");
                 }
-            } else {
-                _b && r.push("{" + _b + "}");
             }
+            return r.join("");
+        }else{
+            return "";
         }
-        var result = r.join("");
-        return result;
     },
     minify: function (result) {
         if(result) {
