@@ -57,7 +57,7 @@ var util = {
                     var _path = require("path").resolve(path, "./../", b);
                     var base64 = "";
                     if (topolr.file(_path).isExists() && topolr.file(_path).infoSync().size <= isparseimage) {
-                        base64 = 'data:' + require("mime-types").lookup(_path) + ';base64,' + new Buffer(topolr.file(_path).readSync()).toString('base64');
+                        base64 = 'data:' + require("mime-types").lookup(_path) + ';base64,' + new Buffer(require("fs").readFileSync(_path)).toString('base64');
                     }
                     if (base64) {
                         if (aa) {
