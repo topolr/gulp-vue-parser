@@ -1,6 +1,15 @@
 <style scoped>
-    a{
+    .a{
         color:red;
+        .b,.c{
+            color:yellow;
+        }
+        .b:after,.c:after{
+            color:blue;
+        }
+        .d{
+            background:url("images/a.png");
+        }
     }
 </style>
 <template>

@@ -7,42 +7,73 @@ var util = {
     getId: function () {
         return "data-v-" + Math.random().toString(36).slice(2, 10);
     },
-    parseless: function (content) {
+    parseless: function (content, path, isparseimage) {
         var ps = topolr.promise();
-        if(content) {
+        if (content) {
             less.render(content, function (e, output) {
                 if (!e) {
-                    ps.resolve(output.css);
+                    ps.resolve(util.imageBase64(output.css, path, isparseimage));
                 } else {
                     ps.reject(e);
                 }
             });
-        }else{
+        } else {
             ps.resolve("");
         }
         return ps;
     },
-    parsesass: function (content, path) {
+    parsesass: function (content, path, isparseimage) {
         var ps = topolr.promise();
-        if(content) {
+        if (content) {
             sass.render({
                 data: content,
                 sourceMap: true,
                 includePaths: [require("path").resolve(path, "./../")]
             }, function (err, result) {
                 if (!err) {
-                    ps.resolve(result.css.toString());
+                    ps.resolve(util.imageBase64(result.css.toString(), path, isparseimage));
                 } else {
                     ps.reject(err);
                 }
             });
-        }else{
+        } else {
             ps.resolve("");
         }
         return ps;
     },
+    imageBase64: function (content, path, isparseimage) {
+        if (isparseimage) {
+            return content.replace(/url\(['"]*.*?["']*\)/gi, function (a) {
+                var b = a.substring(4, a.length - 1).trim();
+                var result = a;
+                var aa = false;
+                if (b[0] === "'" || b[0] === "\"") {
+                    aa = true;
+                    b = b.substring(1, b.length - 1);
+                }
+                var mt = b.split("?");
+                b = mt[0], suffix = mt[1];
+                if (/^\S+\.[a-zA-Z]+$/.test(b)) {
+                    var _path = require("path").resolve(path, "./../", b);
+                    var base64 = "";
+                    if (topolr.file(_path).isExists() && topolr.file(_path).infoSync().size <= isparseimage) {
+                        base64 = 'data:' + require("mime-types").lookup(_path) + ';base64,' + new Buffer(topolr.file(_path).readSync()).toString('base64');
+                    }
+                    if (base64) {
+                        if (aa) {
+                            rr = "url(\"" + base64 + "\")";
+                        } else {
+                            rr = "url(" + c + base64 + ")";
+                        }
+                        result = rr;
+                    }
+                }
+                return result;
+            });
+        }
+    },
     editSelector: function (content, id) {
-        if(content) {
+        if (content) {
             var _a = content.split(/\{|\}/), r = [];
             for (var i = 0; i < _a.length; i++) {
                 var _b = _a[i].trim();
@@ -52,12 +83,18 @@ var util = {
                         _b.split(" ").forEach(function (p1, p2, p3) {
                             var t = [];
                             p1.split(",").forEach(function (p4) {
-                                if (p4.indexOf(":") === -1) {
-                                    t.push(p4 + "[" + id + "]");
-                                } else {
-                                    var et = p4.split(":");
-                                    t.push(et.shift() + "[" + id + "]:" + et.join(":"));
-                                }
+                                var tt = [];
+                                p4.split(" ").forEach(function (p5) {
+                                    if (p5.trim()) {
+                                        if (p5.indexOf(":") === -1) {
+                                            tt.push(p5 + "[" + id + "]");
+                                        } else {
+                                            var et = p5.split(":");
+                                            tt.push(et.shift() + "[" + id + "]:" + et.join(":"));
+                                        }
+                                    }
+                                });
+                                t.push(tt.join(" "));
                             });
                             p.push(t.join(","));
                         });
@@ -68,18 +105,18 @@ var util = {
                 }
             }
             return r.join("");
-        }else{
+        } else {
             return "";
         }
     },
     minify: function (result) {
-        if(result) {
+        if (result) {
             var uglifycss = require("uglifycss");
             return uglifycss.processString(result, {
                 uglyComments: true,
                 cuteComments: true
             });
-        }else{
+        } else {
             return "";
         }
     },
@@ -100,17 +137,17 @@ module.exports = function (info, path) {
             if (style.attrs.lang && style.attrs.lang === "css") {
                 rt = style.content;
             } else if (style.attrs.lang && style.attrs.lang === "sass") {
-                rt = util.parsesass(style.content, path);
+                rt = util.parsesass(style.content, path, ths.option.styleImageBase64);
             } else if (style.attrs.lang && style.attrs.lang === "less") {
-                rt = util.parseless(style.content, path);
+                rt = util.parseless(style.content, path, ths.option.styleImageBase64);
             } else {
                 if (ths.option.styleParse) {
                     rt = ths.option.styleParse(style.content, require("path").resolve(path, "./../"), path);
                 } else {
                     if (ths.option.defaultStyleLang === "sass") {
-                        rt = util.parsesass(style.content, path);
+                        rt = util.parsesass(style.content, path, ths.option.styleImageBase64);
                     } else if (ths.option.defaultStyleLang === "less") {
-                        rt = util.parseless(style.content, path);
+                        rt = util.parseless(style.content, path, ths.option.styleImageBase64);
                     } else if (ths.option.defaultStyleLang === "css") {
                         rt = style.content;
                     } else {
