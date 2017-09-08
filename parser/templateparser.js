@@ -16,8 +16,12 @@ module.exports=function (info) {
         } else {
             content = "";
         }
-        return "function(require, exports, module){module.exports={template:" + (JSON.stringify(content) || '\"\"') + "};}";
+        if(content) {
+            return "function(require, exports, module){module.exports={template:" + (JSON.stringify(content) || '\"\"') + "};}";
+        }else{
+            return "function(require, exports, module){module.exports={};}";
+        }
     }else{
-        return "function(require, exports, module){module.exports={template:''};}";
+        return "function(require, exports, module){module.exports={};}";
     }
 };
