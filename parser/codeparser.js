@@ -7,6 +7,9 @@ module.exports=function (info) {
         if (content) {
             code = babel.transform(content, {
                 presets: [_path + "/babel-preset-es2015", _path + "/babel-preset-stage-2"]
+                ,plugins: [
+                    'babel-plugin-transform-vue-jsx'
+                ]
             }).code;
         }
         return "function(require, exports, module){" + code + "}";
