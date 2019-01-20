@@ -23,10 +23,25 @@
         data:function(){
             return{
             }
-        },
-        components:{
+        }
+        ,props: {
+            txt: {
+                default: 'button'
+            }
+        }
+        ,components:{
             "a-header":require("./header"),
             "a-footer":require("./footer")
+        }
+        ,methods: {
+            test(){
+                return console.info(`test`)
+            }
+        }
+        ,render(){
+            return <center class='center'>
+                <button class='button' onClick={this.test}>{this.txt}</button>
+            </center>
         }
     };
 </script>
